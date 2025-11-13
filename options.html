@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Chegg Helper Options</title>
+    <style>
+      body { font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 20px; color: #111; }
+      h1 { font-size: 18px; }
+      .card { border: 1px solid #e5e5e9; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+      label { display: block; font-size: 12px; color: #444; margin: 8px 0 6px; }
+      input[type="text"], textarea { width: 100%; box-sizing: border-box; border: 1px solid #ddd; border-radius: 8px; padding: 8px 10px; font-size: 14px; }
+      button { border: 1px solid #ddd; border-radius: 8px; padding: 8px 12px; cursor: pointer; background: #fff; }
+      .row { display: flex; gap: 8px; align-items: center; }
+      .right { justify-content: flex-end; }
+      .muted { color: #666; font-size: 12px; }
+      .ok { color: #0b8f2f; }
+      .err { color: #c62828; }
+    </style>
+  </head>
+  <body>
+    <h1>Chegg Helper – Options</h1>
+
+    <div class="card">
+      <h2>API Keys</h2>
+      <p class="muted">Keys are stored locally with <code>chrome.storage.sync</code>. Paste your own keys here.</p>
+      <label>DeepSeek API Key</label>
+      <input id="deepseekKey" type="text" placeholder="sk-..." />
+      <label style="margin-top:12px">Google Web Client ID</label>
+      <input id="googleClientId" type="text" placeholder="xxxxxxx.apps.googleusercontent.com" />
+      <label style="margin-top:12px">Computed Redirect URI (add this in Google Cloud &rarr; OAuth client)</label>
+      <div class="row">
+        <input id="redirectUri" type="text" readonly style="flex:1" />
+        <button id="copyRedirect">Copy</button>
+      </div>
+      <div class="row right" style="margin-top:10px;">
+        <button id="save">Save</button>
+        <button id="test">Test Models</button>
+      </div>
+      <div id="status" class="muted" style="margin-top:8px;"></div>
+    </div>
+
+    <div class="card">
+      <h2>Prompts</h2>
+      <div class="row">
+        <button id="exportPrompts">Export JSON</button>
+        <input type="file" id="importFile" accept="application/json" />
+        <button id="clearPrompts">Clear All</button>
+      </div>
+      <div id="promptCount" class="muted" style="margin-top:8px;"></div>
+    </div>
+
+    <script src="options.js"></script>
+  </body>
+  </html>

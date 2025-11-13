@@ -1,0 +1,58 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+  "manifest_version": 3,
+  "name": "Chegg Helper",
+  "version": "0.1.0",
+  "description": "Auto refresh, auto accept, and unlock pro features of Chegg.",
+  
+  "permissions": [
+    "storage",
+    "clipboardWrite",
+    "identity"
+  ],
+  "host_permissions": [
+    "https://api.deepseek.com/*",
+    "https://www.googleapis.com/*",
+    "https://securetoken.googleapis.com/*",
+    "https://oauth2.googleapis.com/*",
+    "https://firestore.googleapis.com/*",
+    "https://identitytoolkit.googleapis.com/*",
+    "https://accounts.google.com/*",
+    "https://expert.chegg.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://expert.chegg.com/*"
+      ],
+      "js": ["src/content.js"],
+      "css": ["src/styles.css"],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "options_page": "options.html",
+  "action": {
+    "default_title": "Chegg Helper",
+    "default_popup": "src/popup.html",
+    "default_icon": "Chegg Helper.png"
+  },
+  "icons": {
+    "16": "Chegg Helper.png",
+    "32": "Chegg Helper.png",
+    "48": "Chegg Helper.png",
+    "128": "Chegg Helper.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/styles.css"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
