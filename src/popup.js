@@ -36,10 +36,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (apiStatusEl) {
     if (hasAPIKey) {
       apiStatusEl.textContent = 'Configured';
-      apiStatusEl.classList.add('active');
+      apiStatusEl.classList.remove('is-warning');
+      apiStatusEl.classList.add('is-configured');
+      apiStatusEl.setAttribute('aria-label', 'API key is configured');
     } else {
       apiStatusEl.textContent = 'Not Set';
-      apiStatusEl.classList.remove('active');
+      apiStatusEl.classList.remove('is-configured');
+      apiStatusEl.classList.add('is-warning');
+      apiStatusEl.setAttribute('aria-label', 'API key is not configured');
     }
   }
 
@@ -47,7 +51,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnOptions = qs('btnOptions');
   if (btnOptions) {
     btnOptions.addEventListener('click', () => {
+      btnOptions.classList.add('is-loading');
+      btnOptions.setAttribute('aria-busy', 'true');
       chrome.runtime.openOptionsPage();
+      // Remove loading state after a short delay
+      setTimeout(() => {
+        btnOptions.classList.remove('is-loading');
+        btnOptions.removeAttribute('aria-busy');
+      }, 500);
     });
   }
 
@@ -55,22 +66,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnRefresh = qs('btnRefresh');
   if (btnRefresh) {
     btnRefresh.addEventListener('click', async () => {
-      const originalText = btnRefresh.textContent;
-      btnRefresh.textContent = 'Refreshing...';
+      const textSpan = btnRefresh.querySelector('span:last-child');
+      const originalText = textSpan.textContent;
+
+      // Add loading state
+      btnRefresh.classList.add('is-loading');
       btnRefresh.disabled = true;
+      btnRefresh.setAttribute('aria-busy', 'true');
+      textSpan.textContent = 'Refreshing...';
 
       const success = await refreshCheggTab();
 
+      // Remove loading state
+      btnRefresh.classList.remove('is-loading');
+      btnRefresh.removeAttribute('aria-busy');
+
       if (success) {
-        btnRefresh.textContent = 'Refreshed!';
+        textSpan.textContent = 'Refreshed!';
         setTimeout(() => {
-          btnRefresh.textContent = originalText;
+          textSpan.textContent = originalText;
           btnRefresh.disabled = false;
         }, 1500);
       } else {
-        btnRefresh.textContent = 'No Chegg tab found';
+        textSpan.textContent = 'No Chegg tab found';
         setTimeout(() => {
-          btnRefresh.textContent = originalText;
+          textSpan.textContent = originalText;
           btnRefresh.disabled = false;
         }, 2000);
       }

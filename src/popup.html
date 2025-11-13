@@ -1,26 +1,12 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Chegg Helper</title>
+    <title>Chegg Helper - Extension Popup</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
     <style>
-      :root {
-        --primary: #1a73e8;
-        --primary-dark: #1557b0;
-        --primary-light: #e8f0fe;
-        --success: #34a853;
-        --warning: #fbbc04;
-        --ink: #202124;
-        --text: #5f6368;
-        --muted: #80868b;
-        --bg: #f8f9fa;
-        --card: #ffffff;
-        --border: #dadce0;
-        --shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
-        --shadow-hover: 0 1px 3px 0 rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15);
-      }
-
+      /* Popup-specific styles using design system variables */
       * {
         box-sizing: border-box;
         margin: 0;
@@ -28,305 +14,518 @@
       }
 
       body {
-        font-family: 'Google Sans', 'Segoe UI', Roboto, -apple-system, system-ui, sans-serif;
+        font-family: var(--chx-font-sans);
         margin: 0;
-        width: 380px;
-        background: var(--bg);
-        color: var(--ink);
-        font-size: 14px;
-        line-height: 1.5;
+        width: 400px;
+        background: var(--chx-gray-50);
+        color: var(--chx-gray-900);
+        font-size: var(--chx-font-size-base);
+        line-height: var(--chx-line-height-normal);
       }
 
-      .container {
+      .popup-container {
         display: flex;
         flex-direction: column;
-        min-height: 400px;
+        min-height: 480px;
+        max-height: 600px;
       }
 
-      .header {
-        background: linear-gradient(135deg, #1a73e8 0%, #4285f4 50%, #5e97f6 100%);
+      /* Header */
+      .popup-header {
+        background: var(--chx-gradient-primary);
         color: white;
-        padding: 24px 20px;
+        padding: var(--chx-space-6) var(--chx-space-5);
         position: relative;
         overflow: hidden;
       }
 
-      .header::before {
+      .popup-header::before {
         content: '';
         position: absolute;
         top: -50%;
         right: -10%;
         width: 200px;
         height: 200px;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.15);
         border-radius: 50%;
+        animation: chx-pulse 3s infinite;
       }
 
-      .header-content {
+      .popup-header-content {
         position: relative;
-        z-index: 1;
+        z-index: var(--chx-z-base);
       }
 
-      .header-title {
-        font-size: 24px;
-        font-weight: 600;
-        margin-bottom: 4px;
+      .popup-title {
+        font-size: var(--chx-font-size-3xl);
+        font-weight: var(--chx-font-weight-bold);
+        margin-bottom: var(--chx-space-1);
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--chx-space-2);
       }
 
-      .header-subtitle {
-        font-size: 13px;
-        opacity: 0.9;
-        font-weight: 400;
+      .popup-subtitle {
+        font-size: var(--chx-font-size-sm);
+        opacity: 0.95;
+        font-weight: var(--chx-font-weight-normal);
       }
 
-      .badge {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.2);
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: 11px;
-        font-weight: 500;
+      .popup-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--chx-space-1);
+        background: rgba(255, 255, 255, 0.25);
+        padding: var(--chx-space-1) var(--chx-space-2);
+        border-radius: var(--chx-radius-full);
+        font-size: var(--chx-font-size-xs);
+        font-weight: var(--chx-font-weight-semibold);
         backdrop-filter: blur(10px);
       }
 
-      .content {
-        flex: 1;
-        padding: 20px;
+      .popup-badge-dot {
+        width: 6px;
+        height: 6px;
+        background: #fff;
+        border-radius: 50%;
+        animation: chx-pulse 2s infinite;
       }
 
-      .features {
+      /* Content */
+      .popup-content {
+        flex: 1;
+        padding: var(--chx-space-5);
+        overflow-y: auto;
+      }
+
+      .popup-section {
+        margin-bottom: var(--chx-space-5);
+      }
+
+      .popup-section-title {
+        font-size: var(--chx-font-size-sm);
+        font-weight: var(--chx-font-weight-semibold);
+        color: var(--chx-gray-600);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: var(--chx-space-3);
+      }
+
+      /* Features Grid */
+      .popup-features {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        margin-bottom: 20px;
+        gap: var(--chx-space-3);
+        margin-bottom: var(--chx-space-5);
       }
 
-      .feature-card {
+      .popup-feature-card {
         background: white;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 16px;
-        transition: all 0.2s ease;
+        border: 1px solid var(--chx-gray-300);
+        border-radius: var(--chx-radius-lg);
+        padding: var(--chx-space-4);
+        transition: all var(--chx-transition-fast);
         cursor: default;
+        position: relative;
       }
 
-      .feature-card:hover {
-        box-shadow: var(--shadow);
+      .popup-feature-card:hover {
+        box-shadow: var(--chx-shadow-md);
         transform: translateY(-2px);
-        border-color: var(--primary);
+        border-color: var(--chx-primary);
       }
 
-      .feature-icon {
-        width: 32px;
-        height: 32px;
-        background: var(--primary-light);
-        border-radius: 8px;
+      .popup-feature-card:focus-within {
+        outline: 2px solid var(--chx-primary);
+        outline-offset: 2px;
+      }
+
+      .popup-feature-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--chx-primary-light), var(--chx-primary));
+        border-radius: var(--chx-radius-base);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
-        margin-bottom: 8px;
+        font-size: var(--chx-font-size-xl);
+        margin-bottom: var(--chx-space-2);
+        box-shadow: var(--chx-shadow-sm);
       }
 
-      .feature-title {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--ink);
-        margin-bottom: 4px;
+      .popup-feature-title {
+        font-size: var(--chx-font-size-base);
+        font-weight: var(--chx-font-weight-semibold);
+        color: var(--chx-gray-900);
+        margin-bottom: var(--chx-space-1);
       }
 
-      .feature-desc {
-        font-size: 11px;
-        color: var(--text);
-        line-height: 1.4;
+      .popup-feature-desc {
+        font-size: var(--chx-font-size-sm);
+        color: var(--chx-gray-600);
+        line-height: var(--chx-line-height-normal);
       }
 
-      .status-card {
+      /* Status Card */
+      .popup-status-card {
         background: white;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 16px;
+        border: 1px solid var(--chx-gray-300);
+        border-radius: var(--chx-radius-lg);
+        padding: var(--chx-space-4);
+        margin-bottom: var(--chx-space-4);
+        box-shadow: var(--chx-shadow-xs);
       }
 
-      .status-row {
+      .popup-status-row {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 8px 0;
+        padding: var(--chx-space-2) 0;
       }
 
-      .status-row:not(:last-child) {
-        border-bottom: 1px solid var(--bg);
+      .popup-status-row:not(:last-child) {
+        border-bottom: 1px solid var(--chx-gray-100);
       }
 
-      .status-label {
-        font-size: 13px;
-        color: var(--text);
+      .popup-status-label {
+        font-size: var(--chx-font-size-base);
+        color: var(--chx-gray-700);
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--chx-space-2);
+        font-weight: var(--chx-font-weight-medium);
       }
 
-      .status-value {
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--ink);
-        padding: 4px 10px;
-        background: var(--bg);
-        border-radius: 8px;
+      .popup-status-icon {
+        font-size: var(--chx-font-size-lg);
       }
 
-      .status-value.active {
-        background: #e6f4ea;
-        color: var(--success);
+      .popup-status-value {
+        font-size: var(--chx-font-size-sm);
+        font-weight: var(--chx-font-weight-semibold);
+        color: var(--chx-gray-900);
+        padding: var(--chx-space-1) var(--chx-space-3);
+        background: var(--chx-gray-100);
+        border-radius: var(--chx-radius-full);
+        border: 1px solid var(--chx-gray-300);
       }
 
-      .btn {
+      .popup-status-value.is-active {
+        background: var(--chx-success-bg);
+        color: var(--chx-success);
+        border-color: var(--chx-success-light);
+      }
+
+      .popup-status-value.is-configured {
+        background: var(--chx-info-bg);
+        color: var(--chx-info);
+        border-color: var(--chx-info-light);
+      }
+
+      .popup-status-value.is-warning {
+        background: var(--chx-warning-bg);
+        color: var(--chx-warning);
+        border-color: var(--chx-warning-light);
+      }
+
+      /* Buttons */
+      .popup-btn {
         width: 100%;
-        padding: 12px 16px;
-        border-radius: 10px;
+        padding: var(--chx-space-3) var(--chx-space-4);
+        border-radius: var(--chx-radius-base);
         border: none;
-        font-size: 14px;
-        font-weight: 500;
+        font-size: var(--chx-font-size-base);
+        font-weight: var(--chx-font-weight-semibold);
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all var(--chx-transition-fast);
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: var(--chx-space-2);
         text-decoration: none;
+        font-family: var(--chx-font-sans);
+        position: relative;
+        overflow: hidden;
       }
 
-      .btn-primary {
-        background: var(--primary);
+      .popup-btn:focus-visible {
+        outline: none;
+        box-shadow: var(--chx-focus-ring);
+      }
+
+      .popup-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .popup-btn-primary {
+        background: var(--chx-gradient-primary);
         color: white;
-        box-shadow: var(--shadow);
+        box-shadow: var(--chx-shadow-md);
       }
 
-      .btn-primary:hover {
-        background: var(--primary-dark);
-        box-shadow: var(--shadow-hover);
+      .popup-btn-primary:hover:not(:disabled) {
+        background: var(--chx-primary-hover);
+        box-shadow: var(--chx-shadow-lg);
         transform: translateY(-1px);
       }
 
-      .btn-primary:active {
+      .popup-btn-primary:active {
         transform: translateY(0);
       }
 
-      .btn-secondary {
+      .popup-btn-secondary {
         background: white;
-        color: var(--ink);
-        border: 1px solid var(--border);
-        margin-top: 8px;
+        color: var(--chx-gray-700);
+        border: 1px solid var(--chx-gray-400);
+        margin-top: var(--chx-space-2);
+        box-shadow: var(--chx-shadow-xs);
       }
 
-      .btn-secondary:hover {
-        background: var(--bg);
-        border-color: var(--primary);
+      .popup-btn-secondary:hover:not(:disabled) {
+        background: var(--chx-gray-50);
+        border-color: var(--chx-primary);
+        box-shadow: var(--chx-shadow-sm);
       }
 
-      .footer {
+      .popup-btn-icon {
+        font-size: var(--chx-font-size-lg);
+      }
+
+      /* Footer */
+      .popup-footer {
         background: white;
-        border-top: 1px solid var(--border);
-        padding: 16px 20px;
+        border-top: 1px solid var(--chx-gray-300);
+        padding: var(--chx-space-4) var(--chx-space-5);
         text-align: center;
       }
 
-      .footer-text {
-        font-size: 12px;
-        color: var(--text);
-        margin-bottom: 8px;
+      .popup-footer-text {
+        font-size: var(--chx-font-size-sm);
+        color: var(--chx-gray-600);
+        margin-bottom: var(--chx-space-2);
       }
 
-      .footer-link {
-        color: var(--primary);
+      .popup-footer-link {
+        color: var(--chx-primary);
         text-decoration: none;
-        font-weight: 500;
+        font-weight: var(--chx-font-weight-semibold);
+        font-size: var(--chx-font-size-sm);
+        transition: color var(--chx-transition-fast);
       }
 
-      .footer-link:hover {
+      .popup-footer-link:hover {
         text-decoration: underline;
+        color: var(--chx-primary-hover);
       }
 
-      .icon-checkmark::before { content: '✓'; color: var(--success); font-weight: bold; }
-      .icon-settings::before { content: '⚙'; }
+      .popup-footer-link:focus-visible {
+        outline: 2px solid var(--chx-primary);
+        outline-offset: 2px;
+        border-radius: var(--chx-radius-sm);
+      }
+
+      /* Loading State */
+      .popup-btn.is-loading {
+        color: transparent;
+        pointer-events: none;
+      }
+
+      .popup-btn.is-loading::after {
+        content: "";
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        top: 50%;
+        left: 50%;
+        margin-left: -9px;
+        margin-top: -9px;
+        border: 2px solid currentColor;
+        border-radius: 50%;
+        border-right-color: transparent;
+        animation: chx-spin 0.6s linear infinite;
+        color: white;
+      }
+
+      .popup-btn-secondary.is-loading::after {
+        color: var(--chx-gray-700);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 450px) {
+        body {
+          width: 100%;
+          min-width: 320px;
+        }
+
+        .popup-features {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Tooltip Enhancement */
+      [data-tooltip] {
+        position: relative;
+      }
+
+      [data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-8px);
+        background: var(--chx-gray-900);
+        color: white;
+        padding: var(--chx-space-1) var(--chx-space-2);
+        border-radius: var(--chx-radius-sm);
+        font-size: var(--chx-font-size-xs);
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--chx-transition-base);
+        z-index: var(--chx-z-tooltip);
+      }
+
+      [data-tooltip]:hover::after {
+        opacity: 1;
+      }
+
+      /* Screen Reader Only */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* Accessibility: High Contrast Support */
+      @media (prefers-contrast: high) {
+        .popup-feature-card {
+          border-width: 2px;
+        }
+
+        .popup-btn {
+          border-width: 2px;
+        }
+      }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="header">
-        <div class="header-content">
-          <div class="header-title">
+    <div class="popup-container" role="main">
+      <!-- Header -->
+      <header class="popup-header" role="banner">
+        <div class="popup-header-content">
+          <h1 class="popup-title">
             Chegg Helper
-            <span class="badge">Active</span>
-          </div>
-          <div class="header-subtitle">Enhance your Chegg expert experience</div>
+            <span class="popup-badge" role="status" aria-label="Extension is active">
+              <span class="popup-badge-dot" aria-hidden="true"></span>
+              Active
+            </span>
+          </h1>
+          <p class="popup-subtitle">Enhance your Chegg expert experience</p>
         </div>
-      </div>
+      </header>
 
-      <div class="content">
-        <div class="features">
-          <div class="feature-card">
-            <div class="feature-icon">⚡</div>
-            <div class="feature-title">Auto Refresh</div>
-            <div class="feature-desc">Automatically refresh questions</div>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">✨</div>
-            <div class="feature-title">Auto Accept</div>
-            <div class="feature-desc">Quick question acceptance</div>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">📝</div>
-            <div class="feature-title">AI Generate</div>
-            <div class="feature-desc">Smart answer generation</div>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">🎨</div>
-            <div class="feature-title">Format Answer</div>
-            <div class="feature-desc">Professional formatting</div>
-          </div>
-        </div>
-
-        <div class="status-card">
-          <div class="status-row">
-            <div class="status-label">
-              <span class="icon-checkmark"></span>
-              Extension Status
+      <!-- Main Content -->
+      <div class="popup-content">
+        <!-- Features Section -->
+        <section class="popup-section" aria-labelledby="features-title">
+          <h2 class="popup-section-title sr-only" id="features-title">Available Features</h2>
+          <div class="popup-features" role="list">
+            <div class="popup-feature-card" role="listitem" tabindex="0" data-tooltip="Automatically refresh questions at set intervals">
+              <div class="popup-feature-icon" aria-hidden="true">⚡</div>
+              <h3 class="popup-feature-title">Auto Refresh</h3>
+              <p class="popup-feature-desc">Automatically refresh questions</p>
             </div>
-            <div class="status-value active">Running</div>
-          </div>
-          <div class="status-row">
-            <div class="status-label">
-              <span class="icon-settings"></span>
-              API Key
+
+            <div class="popup-feature-card" role="listitem" tabindex="0" data-tooltip="Quickly accept available questions">
+              <div class="popup-feature-icon" aria-hidden="true">✨</div>
+              <h3 class="popup-feature-title">Auto Accept</h3>
+              <p class="popup-feature-desc">Quick question acceptance</p>
             </div>
-            <div class="status-value" id="apiStatus">Not Set</div>
+
+            <div class="popup-feature-card" role="listitem" tabindex="0" data-tooltip="Generate answers using AI assistance">
+              <div class="popup-feature-icon" aria-hidden="true">📝</div>
+              <h3 class="popup-feature-title">AI Generate</h3>
+              <p class="popup-feature-desc">Smart answer generation</p>
+            </div>
+
+            <div class="popup-feature-card" role="listitem" tabindex="0" data-tooltip="Format answers professionally with Chegg guidelines">
+              <div class="popup-feature-icon" aria-hidden="true">🎨</div>
+              <h3 class="popup-feature-title">Format Answer</h3>
+              <p class="popup-feature-desc">Professional formatting</p>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <button id="btnOptions" class="btn btn-primary">
-          <span>⚙️</span>
-          <span>Open Settings</span>
-        </button>
+        <!-- Status Section -->
+        <section class="popup-section" aria-labelledby="status-title">
+          <h2 class="popup-section-title" id="status-title">System Status</h2>
+          <div class="popup-status-card" role="status" aria-live="polite">
+            <div class="popup-status-row">
+              <div class="popup-status-label">
+                <span class="popup-status-icon" aria-hidden="true">✓</span>
+                <span>Extension Status</span>
+              </div>
+              <div class="popup-status-value is-active" aria-label="Extension is running">
+                Running
+              </div>
+            </div>
+            <div class="popup-status-row">
+              <div class="popup-status-label">
+                <span class="popup-status-icon" aria-hidden="true">🔑</span>
+                <span>API Configuration</span>
+              </div>
+              <div class="popup-status-value is-warning" id="apiStatus" aria-label="API key configuration status">
+                Checking...
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <button id="btnRefresh" class="btn btn-secondary">
-          <span>🔄</span>
-          <span>Refresh Chegg Page</span>
-        </button>
+        <!-- Actions -->
+        <section class="popup-section" aria-labelledby="actions-title">
+          <h2 class="sr-only" id="actions-title">Quick Actions</h2>
+          <button
+            id="btnOptions"
+            class="popup-btn popup-btn-primary"
+            aria-label="Open extension settings"
+            data-tooltip="Configure DeepSeek API and custom prompts"
+          >
+            <span class="popup-btn-icon" aria-hidden="true">⚙️</span>
+            <span>Open Settings</span>
+          </button>
+
+          <button
+            id="btnRefresh"
+            class="popup-btn popup-btn-secondary"
+            aria-label="Refresh current Chegg page"
+            data-tooltip="Reload the Chegg page to apply changes"
+          >
+            <span class="popup-btn-icon" aria-hidden="true">🔄</span>
+            <span>Refresh Chegg Page</span>
+          </button>
+        </section>
       </div>
 
-      <div class="footer">
-        <div class="footer-text">Need help with setup or have questions?</div>
-        <a href="https://wa.me/918919937369" target="_blank" class="footer-link">Contact Support on WhatsApp</a>
-      </div>
+      <!-- Footer -->
+      <footer class="popup-footer" role="contentinfo">
+        <p class="popup-footer-text">Need help with setup or have questions?</p>
+        <a
+          href="https://wa.me/918919937369"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="popup-footer-link"
+          aria-label="Contact support via WhatsApp"
+        >
+          Contact Support on WhatsApp
+        </a>
+      </footer>
     </div>
 
     <script src="popup.js" type="module"></script>
