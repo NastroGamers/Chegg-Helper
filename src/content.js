@@ -1987,10 +1987,37 @@
   }
 
   // -------- Render.js-style converter (no AI, plain HTML) --------
+  // ENHANCED: Now supports all Chegg Authoring Tools including %%, ==, code blocks
   function convertLikeRenderToHtml(text) {
     try {
       let t = String(text == null ? '' : text);
       if (!t.trim()) return '';
+
+      // NEW: Step 0 - Handle code snippets FIRST (before other processing)
+      // Code blocks: ```language\ncode\n```
+      const codeBlocks = [];
+      t = t.replace(/```(\w+)?(?::linenos)?\n([\s\S]+?)```/g, (match, lang, code) => {
+        const placeholder = `<<<CODE_BLOCK_${codeBlocks.length}>>>`;
+        codeBlocks.push({ lang: lang || 'text', code: code.trim() });
+        return placeholder;
+      });
+
+      // NEW: Handle Chemistry Equation Tool markers (%%)
+      const chemEquations = [];
+      t = t.replace(/%%(.+?)%%/g, (match, equation) => {
+        const placeholder = `<<<CHEM_EQ_${chemEquations.length}>>>`;
+        chemEquations.push(equation);
+        return placeholder;
+      });
+
+      // NEW: Handle Inline Equation Tool markers (==)
+      const inlineEquations = [];
+      t = t.replace(/==(.+?)==/g, (match, equation) => {
+        const placeholder = `<<<INLINE_EQ_${inlineEquations.length}>>>`;
+        inlineEquations.push(equation);
+        return placeholder;
+      });
+
       // Step 1: tables to LaTeX blocks
       t = convertTablesToLatex_simple(t);
       // Step 2: $$..$$ -> \[ .. \] and $..$ -> \(..\) (currency safeguarded later)
@@ -2070,6 +2097,32 @@
       if (inlist1) output += '</ul>\n';
       output = cleanSpanContent_simple(output)
         .replace(/<br\/?\>/g, '');
+
+      // NEW: Restore code blocks with proper formatting
+      output = output.replace(/<<<CODE_BLOCK_(\d+)>>>/g, (match, index) => {
+        const block = codeBlocks[parseInt(index)];
+        if (!block) return match;
+        // Format as pre/code block for Chegg
+        const escapedCode = block.code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return `<pre><code class="language-${block.lang}">${escapedCode}</code></pre>`;
+      });
+
+      // NEW: Restore chemistry equations with Chegg's chemistry tool marker
+      output = output.replace(/<<<CHEM_EQ_(\d+)>>>/g, (match, index) => {
+        const equation = chemEquations[parseInt(index)];
+        if (!equation) return match;
+        // Use Chegg's chemistry equation format
+        return `<span data-chem-equation="true">${equation}</span>`;
+      });
+
+      // NEW: Restore inline equations with Chegg's inline math format
+      output = output.replace(/<<<INLINE_EQ_(\d+)>>>/g, (match, index) => {
+        const equation = inlineEquations[parseInt(index)];
+        if (!equation) return match;
+        // Use Chegg's inline math format
+        return `<span data-math-type="mhchem">${equation}</span>`;
+      });
+
       return output.replace(/¤/g, '$');
     } catch { return ''; }
   }
