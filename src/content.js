@@ -4121,7 +4121,8 @@ if (p.type === 'math') {
     let i = 0;
     function flushPara(buf) {
       if (!buf.length) return;
-      out.push(`<p>${inline(buf.join(' '))}</p>`);
+      const paraStyle = 'margin: 10px 0; line-height: 1.6; color: #202124; font-size: 14px;';
+      out.push(`<p style="${paraStyle}">${inline(buf.join(' '))}</p>`);
       buf.length = 0;
     }
     function parseList(start, ordered) {
@@ -4138,15 +4139,18 @@ if (p.type === 'math') {
       }
       // Single-item lists degrade to a normal paragraph to avoid unwanted bullets
       if (items.length <= 1) {
-        out.push(`<p>${inline(items[0] || '')}</p>`);
+        const paraStyle = 'margin: 10px 0; line-height: 1.6; color: #202124; font-size: 14px;';
+        out.push(`<p style="${paraStyle}">${inline(items[0] || '')}</p>`);
         return j - 1;
       }
-      const li = items.map(x => `<li>${inline(x)}</li>`).join('');
-      out.push(`<${tag}>${li}</${tag}>`);
+      const listStyle = 'margin: 10px 0; padding-left: 24px; line-height: 1.8;';
+      const liStyle = 'margin: 6px 0; color: #202124; font-size: 14px;';
+      const li = items.map(x => `<li style="${liStyle}">${inline(x)}</li>`).join('');
+      out.push(`<${tag} style="${listStyle}">${li}</${tag}>`);
       return j - 1;
     }
     function parseTable(start) {
-      // Basic GitHub-flavored table parsing
+      // Enhanced GitHub-flavored table parsing with inline styles for Chegg compatibility
       const header = lines[start];
       const sep = lines[start + 1] || '';
       if (!/\|/.test(header) || !/^\s*\|?\s*(:?-+\s*\|)+\s*:?-+\s*\|?\s*$/.test(sep)) return -1;
@@ -4155,9 +4159,15 @@ if (p.type === 'math') {
       const rows = [];
       let j = start + 2;
       while (j < lines.length && /\|/.test(lines[j])) { rows.push(cells(lines[j])); j++; }
-      const theadHtml = `<tr>${thead.map(c => `<th>${c}</th>`).join('')}</tr>`;
-      const bodyHtml = rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('');
-      out.push(`<table class="chx-table"><thead>${theadHtml}</thead><tbody>${bodyHtml}</tbody></table>`);
+
+      // Inline styles for perfect rendering in Chegg's editor
+      const tableStyle = 'border-collapse: collapse; width: 100%; margin: 12px 0; border: 1px solid #e0e0e0;';
+      const thStyle = 'border: 1px solid #dadce0; padding: 10px 12px; text-align: left; background: #f8f9fa; font-weight: 600; color: #202124;';
+      const tdStyle = 'border: 1px solid #dadce0; padding: 10px 12px; text-align: left; color: #5f6368;';
+
+      const theadHtml = `<tr>${thead.map(c => `<th style="${thStyle}">${c}</th>`).join('')}</tr>`;
+      const bodyHtml = rows.map(r => `<tr>${r.map(c => `<td style="${tdStyle}">${c}</td>`).join('')}</tr>`).join('');
+      out.push(`<table class="chx-table" style="${tableStyle}"><thead>${theadHtml}</thead><tbody>${bodyHtml}</tbody></table>`);
       return j - 1;
     }
     const paraBuf = [];
@@ -4165,9 +4175,23 @@ if (p.type === 'math') {
       const line = lines[i];
       if (!line.trim()) { flushPara(paraBuf); continue; }
 
-      // headings ######
+      // headings ###### with inline styles for Chegg
       const h = line.match(/^(#{1,6})\s+(.*)$/);
-      if (h) { flushPara(paraBuf); const level = h[1].length; out.push(`<h${level}>${inline(h[2])}</h${level}>`); continue; }
+      if (h) {
+        flushPara(paraBuf);
+        const level = h[1].length;
+        const headingStyles = {
+          1: 'font-size: 24px; font-weight: 700; color: #202124; margin: 16px 0 10px;',
+          2: 'font-size: 20px; font-weight: 700; color: #202124; margin: 14px 0 8px; border-bottom: 2px solid #e0e0e0; padding-bottom: 6px;',
+          3: 'font-size: 18px; font-weight: 600; color: #202124; margin: 12px 0 6px;',
+          4: 'font-size: 16px; font-weight: 600; color: #5f6368; margin: 10px 0 6px;',
+          5: 'font-size: 14px; font-weight: 600; color: #5f6368; margin: 8px 0 4px;',
+          6: 'font-size: 13px; font-weight: 600; color: #80868b; margin: 6px 0 4px;'
+        };
+        const style = headingStyles[level] || headingStyles[3];
+        out.push(`<h${level} style="${style}">${inline(h[2])}</h${level}>`);
+        continue;
+      }
 
       // hr
       if (/^\s*(?:---|\*\*\*|___)\s*$/.test(line)) { flushPara(paraBuf); out.push('<hr/>'); continue; }
@@ -4183,13 +4207,14 @@ if (p.type === 'math') {
         i = j - 1; continue;
       }
 
-      // LaTeX display math blocks on a single line: $$ ... $$ or \[ ... \]
+      // LaTeX display math blocks on a single line: $$ ... $$ or \[ ... \] with inline styles
       const mathBlock1 = line.match(/^\s*\$\$\s*(.*?)\s*\$\$\s*$/);
       const mathBlock2 = line.match(/^\s*\\\[\s*(.*?)\s*\\\]\s*$/);
       if (mathBlock1 || mathBlock2) {
         flushPara(paraBuf);
         const expr = (mathBlock1 ? mathBlock1[1] : mathBlock2[1]) || '';
-        out.push(`<div class="chx-math chx-math-block">${renderTex(expr)}</div>`);
+        const mathBlockStyle = 'display: block; text-align: center; margin: 14px 0; font-size: 1.1em; font-family: "Times New Roman", serif;';
+        out.push(`<div class="chx-math chx-math-block" style="${mathBlockStyle}">${renderTex(expr)}</div>`);
         continue;
       }
 
@@ -4207,18 +4232,21 @@ if (p.type === 'math') {
     flushPara(paraBuf);
 
     let html = out.join('\n');
-    // Early math conversion so block math inside paragraphs renders properly
+    // Early math conversion so block math inside paragraphs renders properly with inline styles
+    const inlineMathStyle = 'display: inline-block; vertical-align: middle; font-family: "Times New Roman", serif; margin: 0 2px;';
+    const blockMathStyle = 'display: block; text-align: center; margin: 14px 0; font-size: 1.1em; font-family: "Times New Roman", serif;';
+
     // Inline math: \( ... \), $...$, and /( ... /)
-    html = html.replace(/\\\(([\s\S]+?)\\\)/g, (m, inner) => `<span class="chx-math chx-math-inline">${renderTex(inner)}</span>`);
+    html = html.replace(/\\\(([\s\S]+?)\\\)/g, (m, inner) => `<span class="chx-math chx-math-inline" style="${inlineMathStyle}">${renderTex(inner)}</span>`);
     html = html.replace(/\$([\s\S]+?)\$/g, (m, inner) => {
       // Avoid converting simple currency-like patterns
       if (!/(\\|\^|_|\{|\}|\d\s*[+\-×÷/*=]|\\frac|\\sqrt)/.test(inner)) return m;
-      return `<span class="chx-math chx-math-inline">${renderTex(inner)}</span>`;
+      return `<span class="chx-math chx-math-inline" style="${inlineMathStyle}">${renderTex(inner)}</span>`;
     });
-    html = html.replace(/\/\(([\s\S]+?)\/\)/g, (m, inner) => `<span class="chx-math chx-math-inline">${renderTex(inner)}</span>`);
+    html = html.replace(/\/\(([\s\S]+?)\/\)/g, (m, inner) => `<span class="chx-math chx-math-inline" style="${inlineMathStyle}">${renderTex(inner)}</span>`);
     // Display math anywhere: \[ ... \] and $$...$$
-    html = html.replace(/\\\[([\s\S]+?)\\\]/g, (m, inner) => `<span class="chx-math chx-math-block">${renderTex(inner)}</span>`);
-    html = html.replace(/\$\$([\s\S]+?)\$\$/g, (m, inner) => `<span class="chx-math chx-math-block">${renderTex(inner)}</span>`);
+    html = html.replace(/\\\[([\s\S]+?)\\\]/g, (m, inner) => `<span class="chx-math chx-math-block" style="${blockMathStyle}">${renderTex(inner)}</span>`);
+    html = html.replace(/\$\$([\s\S]+?)\$\$/g, (m, inner) => `<span class="chx-math chx-math-block" style="${blockMathStyle}">${renderTex(inner)}</span>`);
 
     // Step 3: replace code placeholders
     html = html.replace(/\[\[\[CHX_CODE_(\d+)\]\]\]/g, (m, n) => {
