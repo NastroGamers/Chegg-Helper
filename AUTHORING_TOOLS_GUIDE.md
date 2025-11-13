@@ -1,8 +1,52 @@
-# Chegg Authoring Tools Guide
+# Chegg Authoring Tools Guide - Version 3.0
 
 ## Overview
 
-This extension now includes comprehensive **Chegg Authoring Tools** to help you format answers according to Chegg's guidelines. The tools provide automated formatting, validation, and easy-to-use toolbar for creating professional, well-structured answers.
+This extension now includes **ALL Official Chegg Authoring Tools** (July 2025 compatible) to help you format answers perfectly according to Chegg's guidelines. The extension provides complete automation for all Chegg tools including equation renderers, chemistry equations, code snippets, accounting tables, and more.
+
+## 🆕 NEW in Version 3.0 (July 2025)
+
+✅ **Code Snippet Tool** - Syntax-highlighted code with line numbers
+✅ **Chemistry Equation Tool** - Accessible via %% shortcut
+✅ **Inline Equation Tool** - Accessible via == shortcut
+✅ **Math in Text Tool** - 2-line and 3-line calculations
+✅ **Journal Entry Tables** - Accounting-specific tables with Dr/Cr
+✅ **T-Account Tables** - Visual accounting ledger format
+✅ **Enhanced Table Tool** - Advanced formatting with currency, alignment
+✅ **Auto-Detection** - Automatically detects content type and applies appropriate tool
+✅ **Enhanced Auto-Format** - Intelligently formats using all available tools
+
+## Complete List of Supported Chegg Tools
+
+### Text Editor Tools
+✅ Bold, Italic, Underline (Ctrl+B, Ctrl+I, Ctrl+U)
+✅ Headers (H1, H2, H3, H4)
+✅ Superscripts and Subscripts
+✅ Text Alignment (left, center, right)
+✅ Ordered and Unordered Lists
+
+### Mathematics Tools
+✅ **Equation Renderer** - Multi-line equations with live preview
+✅ **Inline Equation** - Math within text (== shortcut)
+✅ **Math in Text** - 2-line and 3-line automatic calculations
+✅ **Display Math** - Centered equations on separate lines
+
+### Chemistry Tools
+✅ **Chemistry Equation Tool** - Chemical equations (%% shortcut)
+✅ **Chemistry Drawing Tool** - Molecular structures
+✅ **Chemical Formula** - Auto-format chemical formulas
+
+### Table Tools
+✅ **Advanced Table Tool** - Excel-like functions
+✅ **Journal Entry Table** - Accounting Dr/Cr tables
+✅ **T-Account Table** - Visual ledger format
+
+### Code & Special Tools
+✅ **Code Snippet Tool** - Syntax highlighting with line numbers
+✅ **Drawing Tool** - Illustrations and diagrams
+✅ **Electric Circuit Tool** - Circuit diagrams
+✅ **Graphing Tool** - Data visualization
+✅ **Image Upload & Labelling** - Add labels to images
 
 ## Features
 
@@ -12,9 +56,11 @@ The extension can automatically format your pasted answer text to meet Chegg sta
 
 - ✅ **Step-by-step structure** - Automatically detects and formats steps
 - ✅ **Mathematical equations** - Converts to proper LaTeX format
-- ✅ **Chemical formulas** - Auto-formats chemical notation
+- ✅ **Chemical formulas** - Auto-formats chemical notation with %% markers
+- ✅ **Code snippets** - Auto-detects and formats code blocks
 - ✅ **Final answer highlighting** - Clearly marks the final answer
 - ✅ **List formatting** - Properly formats bulleted and numbered lists
+- ✅ **Accounting tables** - Creates Journal Entry and T-Account tables
 - ✅ **Clean spacing** - Removes excessive blank lines and improves readability
 
 ### 2. **Formatting Toolbar**
@@ -360,18 +406,191 @@ For issues or questions:
 
 ---
 
+## NEW TOOLS - Detailed Usage
+
+### 🔧 Code Snippet Tool
+
+Format code with syntax highlighting and line numbers:
+
+**Usage:**
+```python:linenos
+def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n-1)
+```
+
+The extension auto-detects code based on keywords like `def`, `function`, `class`, etc.
+
+**Features:**
+- Syntax highlighting for 50+ languages
+- Optional line numbers (:linenos suffix)
+- Auto-detection of programming languages
+- Preserves indentation
+
+---
+
+### 🧪 Chemistry Equation Tool
+
+Use the %% shortcut to create chemistry equations:
+
+**Usage:**
+```
+%%H2 + O2 → H2O%%
+%%2NaOH + H2SO4 → Na2SO4 + 2H2O%%
+%%CH4 + 2O2 ⇌ CO2 + 2H2O%%
+```
+
+**Features:**
+- Auto-detects chemical reactions with arrows (→, ←, ⇌)
+- Supports reaction conditions
+- Greek letters for equations
+- Automatic subscript/superscript formatting
+
+---
+
+### 📐 Inline Equation Tool
+
+Use the == shortcut for inline equations:
+
+**Usage:**
+```
+The solution is ==x^2 + 5x + 6 = 0== which factors to ==(x+2)(x+3)==.
+```
+
+**Features:**
+- Seamless integration within text
+- Live preview
+- Copy/paste support
+- Same math expressions as Equation Renderer
+
+---
+
+### 🔢 Math in Text Tool
+
+Create automatic calculations:
+
+**3-Line Version:**
+```
+Area = πr²
+= π × 5²
+= 78.54 square units
+```
+
+**2-Line Version:**
+```
+5 × 3 + 2
+= 17
+```
+
+The extension auto-detects calculation patterns and formats them appropriately.
+
+---
+
+### 📊 Accounting Tables
+
+**Journal Entry Table:**
+```
+| Account | Debit | Credit |
+|---------|-------|--------|
+| Cash | 1000 | |
+| Revenue | | 1000 |
+| **Total** | **1000** | **1000** |
+```
+
+**T-Account Table:**
+```
+**Cash Account**
+
+| Debit | | Credit |
+|-------|:-:|--------|
+| Opening: 500 | | Payment: 200 |
+| Receipt: 300 | | |
+| **Balance: 800** | | **Balance: 200** |
+```
+
+Auto-detected when text contains keywords like "debit", "credit", "journal entry", "t-account".
+
+---
+
+### 📈 Enhanced Table Tool
+
+Create tables with advanced formatting:
+
+**Features:**
+- Cell alignment (left, center, right)
+- Currency formatting (auto-adds $ and .00)
+- Headers and gridlines
+- Merge/unmerge cells
+- Auto-sum calculations
+- Decimal formatting
+
+**Example:**
+```
+| Item | Quantity | Price | Total |
+|:-----|:--------:|------:|------:|
+| Widget A | 5 | $10.00 | $50.00 |
+| Widget B | 3 | $15.50 | $46.50 |
+| **Total** | **8** | | **$96.50** |
+```
+
+---
+
+## Content Auto-Detection
+
+The extension automatically detects content types and applies the appropriate tool:
+
+| Content Type | Detection Pattern | Tool Applied |
+|-------------|------------------|--------------|
+| Code | `def`, `function`, `class`, `{}` | Code Snippet Tool |
+| Chemistry | Chemical formulas, reaction arrows | Chemistry Equation Tool |
+| Accounting | "debit", "credit", "journal" | Accounting Tables |
+| Math | Equations, calculations, Greek letters | Inline Equation/Math in Text |
+| Steps | "Step 1", "Step 2", numbered steps | Step-by-Step Format |
+| Tables | Pipes `\|`, aligned columns | Table Tool |
+
+---
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| **Ctrl+B** | Bold text |
+| **Ctrl+I** | Italic text |
+| **Ctrl+U** | Underline text |
+| **==** + Enter | Insert inline equation |
+| **%%** + Enter | Insert chemistry equation |
+| **```** + language | Insert code block |
+
+---
+
 ## Quick Reference Card
 
-| Action | Toolbar Button | Keyboard | Result |
+| Action | Toolbar Button | Shortcut | Result |
 |--------|---------------|----------|--------|
 | Bold | **B** | Ctrl+B | `**text**` |
 | Italic | *I* | Ctrl+I | `*text*` |
-| Inline Math | f(x) | - | `\(x^2\)` |
-| Display Math | ∫ | - | `\[x^2\]` |
-| Subscript | x₂ | - | `<sub>2</sub>` |
-| Superscript | x² | - | `<sup>2</sup>` |
-| Auto Format | ✨ | - | Full format |
+| Code Snippet | </> | ``` | Formatted code |
+| Inline Equation | == | == | `\(equation\)` |
+| Chem Equation | %% | %% | `%%equation%%` |
+| Math in Text | 1+2=3 | - | Auto-calc |
+| Journal Entry | Dr/Cr | - | Accounting table |
+| T-Account | T | - | T-account table |
+| Enhanced Format | ✨ | - | All tools applied |
 | Validate | ✓✓ | - | Quality check |
+
+---
+
+## Tips for Perfect Formatting
+
+1. **Use Shortcuts** - Type `==` for math, `%%` for chemistry, ``` for code
+2. **Let Auto-Detect Work** - The extension recognizes content types automatically
+3. **Review Before Pasting** - Always check the formatted preview
+4. **Validate Answers** - Click ✓✓ to check quality score before submitting
+5. **Include Explanations** - Don't just show steps, explain WHY
+6. **Use Appropriate Tools** - Code in code blocks, equations in math tools
+7. **Format Tables Properly** - Use accounting tables for financial data
+8. **Check Chemistry Arrows** - Use proper reaction arrows (→, ⇌, ⇒)
 
 ---
 
