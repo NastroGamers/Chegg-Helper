@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chegg Authoring Tools - Demo</title>
+    <link rel="stylesheet" href="src/styles.css">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #f5f5f5;
+        }
+        .demo-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .output {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            min-height: 200px;
+        }
+        .section-title {
+            font-weight: 600;
+            color: #444;
+            margin: 20px 0 10px 0;
+            font-size: 18px;
+        }
+        .example-box {
+            background: #e7f5ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #1c7ed6;
+            margin: 15px 0;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🚀 Chegg Authoring Tools - Interactive Demo</h1>
+        <p class="subtitle">Test the comprehensive formatting and validation tools</p>
+
+        <div class="section-title">1. Input Your Answer Text</div>
+        <textarea id="inputText" placeholder="Paste or type your answer here...
+
+Example:
+To solve x^2 + 5x + 6 = 0, we factor the equation.
+Step 1: Find two numbers that multiply to 6 and add to 5
+Those numbers are 2 and 3
+Step 2: Write the factored form
+(x + 2)(x + 3) = 0
+Step 3: Solve for x
+x = -2 or x = -3
+Therefore the solutions are x = -2 and x = -3"></textarea>
+
+        <div id="toolbarContainer"></div>
+
+        <div class="button-group">
+            <button class="chx-btn chx-btn-primary" onclick="autoFormat()">✨ Auto Format</button>
+            <button class="chx-btn chx-btn-secondary" onclick="validateAnswer()">✓✓ Validate Answer</button>
+            <button class="chx-btn chx-btn-outline" onclick="clearAll()">🔄 Clear</button>
+        </div>
+
+        <div class="section-title">2. Formatted Output</div>
+        <div id="output" class="output">
+            <em style="color: #999;">Click "Auto Format" to see the formatted result...</em>
+        </div>
+
+        <div class="section-title">3. Validation Results</div>
+        <div id="validation" class="output">
+            <em style="color: #999;">Click "Validate Answer" to check quality...</em>
+        </div>
+    </div>
+
+    <div class="demo-container">
+        <h2>📚 Quick Examples</h2>
+
+        <div class="example-box">
+            <strong>Example 1: Math Problem</strong>
+            <button class="chx-btn chx-btn-outline" onclick="loadExample(1)" style="float: right;">Load This Example</button>
+            <div style="clear: both; padding-top: 10px;">
+                <code style="white-space: pre-wrap;">Solve the equation x^2 - 4 = 0
+Step 1: Add 4 to both sides
+x^2 = 4
+Step 2: Take square root
+x = +-2
+Therefore x = 2 or x = -2</code>
+            </div>
+        </div>
+
+        <div class="example-box">
+            <strong>Example 2: Chemistry Problem</strong>
+            <button class="chx-btn chx-btn-outline" onclick="loadExample(2)" style="float: right;">Load This Example</button>
+            <div style="clear: both; padding-top: 10px;">
+                <code style="white-space: pre-wrap;">Balance: H2 + O2 -> H2O
+Step 1: Count atoms
+H=2, O=2 on left; H=2, O=1 on right
+Step 2: Balance oxygen by adding coefficient 2 to H2O
+H2 + O2 -> 2H2O
+Step 3: Balance hydrogen by adding coefficient 2 to H2
+2H2 + O2 -> 2H2O
+Final answer: 2H2 + O2 -> 2H2O</code>
+            </div>
+        </div>
+
+        <div class="example-box">
+            <strong>Example 3: Code Problem</strong>
+            <button class="chx-btn chx-btn-outline" onclick="loadExample(3)" style="float: right;">Load This Example</button>
+            <div style="clear: both; padding-top: 10px;">
+                <code style="white-space: pre-wrap;">Write a function to reverse a string
+def reverse_string(s):
+    return s[::-1]
+This uses Python's slice notation with step -1 to reverse the string.
+Example: reverse_string("hello") returns "olleh"</code>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-container">
+        <h2>🎨 Formatting Cheatsheet</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #f8f9fa;">
+                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Input</th>
+                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Output</th>
+                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><code>**text**</code></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>text</strong></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Bold</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><code>*text*</code></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><em>text</em></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Italic</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><code>x^2</code></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">x²</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Superscript</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><code>H2O</code></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">H₂O</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Chemical formula</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><code>1/2</code></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">½</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Fraction</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><code>sqrt(x)</code></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">√x</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Square root</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Load the authoring tools -->
+    <script src="src/authoring-tools.js"></script>
+    <script src="src/formatting-toolbar.js"></script>
+
+    <script>
+        const inputTextarea = document.getElementById('inputText');
+        const outputDiv = document.getElementById('output');
+        const validationDiv = document.getElementById('validation');
+        const toolbarContainer = document.getElementById('toolbarContainer');
+
+        // Create formatting toolbar
+        const toolbar = new FormattingToolbar(inputTextarea, CheggAuthoringTools);
+        toolbarContainer.appendChild(toolbar.getElement());
+
+        function autoFormat() {
+            const input = inputTextarea.value;
+            if (!input.trim()) {
+                alert('Please enter some text first!');
+                return;
+            }
+
+            const formatted = CheggAuthoringTools.autoFormatAnswer(input);
+            outputDiv.innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${escapeHtml(formatted)}</pre>`;
+
+            // Show success message
+            showNotification('Answer formatted successfully!', 'success');
+        }
+
+        function validateAnswer() {
+            const input = inputTextarea.value;
+            if (!input.trim()) {
+                alert('Please enter some text first!');
+                return;
+            }
+
+            const validation = CheggAuthoringTools.validateAnswer(input);
+            const report = CheggAuthoringTools.generateGuidelinesReport(validation);
+
+            let scoreClass = 'poor';
+            if (validation.score >= 80) scoreClass = 'good';
+            else if (validation.score >= 60) scoreClass = 'fair';
+
+            validationDiv.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="display: inline-block; width: 80px; height: 80px; border-radius: 50%;
+                                background: ${scoreClass === 'good' ? '#d3f9d8' : scoreClass === 'fair' ? '#fff3bf' : '#ffe3e3'};
+                                border: 3px solid ${scoreClass === 'good' ? '#51cf66' : scoreClass === 'fair' ? '#ffd43b' : '#ff6b6b'};
+                                display: flex; align-items: center; justify-content: center;
+                                font-size: 28px; font-weight: bold; margin: 0 auto;
+                                color: ${scoreClass === 'good' ? '#2f9e44' : scoreClass === 'fair' ? '#f59f00' : '#e03131'};">
+                        ${validation.score}
+                    </div>
+                    <div style="margin-top: 10px; font-weight: 600;">Quality Score</div>
+                </div>
+                <pre style="white-space: pre-wrap; font-family: inherit; line-height: 1.6;">${escapeHtml(report)}</pre>
+            `;
+
+            showNotification('Validation complete!', 'info');
+        }
+
+        function clearAll() {
+            inputTextarea.value = '';
+            outputDiv.innerHTML = '<em style="color: #999;">Click "Auto Format" to see the formatted result...</em>';
+            validationDiv.innerHTML = '<em style="color: #999;">Click "Validate Answer" to check quality...</em>';
+        }
+
+        function loadExample(num) {
+            const examples = {
+                1: `Solve the equation x^2 - 4 = 0
+Step 1: Add 4 to both sides
+x^2 = 4
+Step 2: Take square root
+x = +-2
+Therefore x = 2 or x = -2`,
+                2: `Balance: H2 + O2 -> H2O
+Step 1: Count atoms
+H=2, O=2 on left; H=2, O=1 on right
+Step 2: Balance oxygen by adding coefficient 2 to H2O
+H2 + O2 -> 2H2O
+Step 3: Balance hydrogen by adding coefficient 2 to H2
+2H2 + O2 -> 2H2O
+Final answer: 2H2 + O2 -> 2H2O`,
+                3: `Write a function to reverse a string
+def reverse_string(s):
+    return s[::-1]
+This uses Python's slice notation with step -1 to reverse the string.
+Example: reverse_string("hello") returns "olleh"`
+            };
+            inputTextarea.value = examples[num];
+            clearAll();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `chx-notification chx-notification-${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.classList.add('show'), 10);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
