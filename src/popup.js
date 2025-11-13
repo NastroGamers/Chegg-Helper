@@ -6,9 +6,18 @@ function qs(id) {
 
 async function checkAPIKey() {
   return new Promise((resolve) => {
-    chrome.storage.sync.get({ deepseek_api_key: '' }, (res) => {
-      const hasKey = !!(res.deepseek_api_key && res.deepseek_api_key.trim());
-      resolve(hasKey);
+    chrome.storage.sync.get({
+      deepseek_api_key: '',
+      openai_api_key: '',
+      gemini_api_key: '',
+      claude_api_key: ''
+    }, (res) => {
+      const providers = [];
+      if (res.deepseek_api_key && res.deepseek_api_key.trim()) providers.push('DeepSeek');
+      if (res.openai_api_key && res.openai_api_key.trim()) providers.push('OpenAI');
+      if (res.gemini_api_key && res.gemini_api_key.trim()) providers.push('Gemini');
+      if (res.claude_api_key && res.claude_api_key.trim()) providers.push('Claude');
+      resolve({ hasKey: providers.length > 0, providers });
     });
   });
 }
@@ -31,14 +40,14 @@ async function refreshCheggTab() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Check API key status
-  const hasAPIKey = await checkAPIKey();
+  const { hasKey, providers } = await checkAPIKey();
   const apiStatusEl = qs('apiStatus');
   if (apiStatusEl) {
-    if (hasAPIKey) {
-      apiStatusEl.textContent = 'Configured';
+    if (hasKey) {
+      apiStatusEl.textContent = `${providers.join(', ')}`;
       apiStatusEl.classList.remove('is-warning');
       apiStatusEl.classList.add('is-configured');
-      apiStatusEl.setAttribute('aria-label', 'API key is configured');
+      apiStatusEl.setAttribute('aria-label', `API configured for: ${providers.join(', ')}`);
     } else {
       apiStatusEl.textContent = 'Not Set';
       apiStatusEl.classList.remove('is-configured');

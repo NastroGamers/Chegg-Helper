@@ -467,10 +467,11 @@
           <div class="options-card-icon" aria-hidden="true">🔑</div>
           <div class="options-card-heading">
             <h2 class="options-card-title" id="api-config-title">API Configuration</h2>
-            <p class="options-card-desc">Set up your DeepSeek API key for AI features</p>
+            <p class="options-card-desc">Set up your API keys for AI features (configure at least one)</p>
           </div>
         </div>
 
+        <!-- DeepSeek API Key -->
         <div class="options-form-group">
           <label for="deepseekKey" class="options-label">
             DeepSeek API Key
@@ -483,20 +484,70 @@
             type="password"
             class="options-input"
             placeholder="sk-..."
-            aria-describedby="api-key-info"
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- OpenAI API Key -->
+        <div class="options-form-group">
+          <label for="openaiKey" class="options-label">
+            OpenAI API Key
+            <span class="options-label-desc">
+              Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">platform.openai.com</a>
+            </span>
+          </label>
+          <input
+            id="openaiKey"
+            type="password"
+            class="options-input"
+            placeholder="sk-..."
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Google Gemini API Key -->
+        <div class="options-form-group">
+          <label for="geminiKey" class="options-label">
+            Google Gemini API Key
+            <span class="options-label-desc">
+              Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio</a>
+            </span>
+          </label>
+          <input
+            id="geminiKey"
+            type="password"
+            class="options-input"
+            placeholder="AI..."
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Anthropic Claude API Key -->
+        <div class="options-form-group">
+          <label for="claudeKey" class="options-label">
+            Anthropic Claude API Key
+            <span class="options-label-desc">
+              Get your API key from <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener noreferrer">console.anthropic.com</a>
+            </span>
+          </label>
+          <input
+            id="claudeKey"
+            type="password"
+            class="options-input"
+            placeholder="sk-ant-..."
             autocomplete="off"
           />
         </div>
 
         <div class="options-info-box" id="api-key-info" role="region" aria-label="API key instructions">
           <div class="options-info-box-title">
-            💡 How to get your DeepSeek API key
+            💡 API Configuration Guide
           </div>
           <ol style="margin-left: var(--chx-space-5); margin-top: var(--chx-space-2);">
-            <li>Visit <a href="https://platform.deepseek.com" target="_blank" rel="noopener noreferrer">platform.deepseek.com</a></li>
-            <li>Sign up or log in to your account</li>
-            <li>Navigate to API Keys section</li>
-            <li>Create a new API key and copy it here</li>
+            <li>You only need to configure at least one API provider to use the extension</li>
+            <li>Configure multiple providers to access more AI models</li>
+            <li>Click the links above each field to get your API keys</li>
+            <li>After entering your keys, click "Save Settings" then "Test Connection"</li>
           </ol>
         </div>
 
