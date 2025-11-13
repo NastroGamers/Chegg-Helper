@@ -19,7 +19,7 @@
       "matches": [
         "https://expert.chegg.com/*"
       ],
-      "js": ["src/content.js"],
+      "js": ["src/authoring-tools.js", "src/formatting-toolbar.js", "src/content.js"],
       "css": ["src/styles.css"],
       "run_at": "document_start"
     }
