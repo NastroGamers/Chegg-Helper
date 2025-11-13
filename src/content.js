@@ -1,19 +1,6 @@
 // Content script: injects UI next to Chegg's "Check Structure" button
 
 (async function () {
-  // Listen for auth changes and refresh Chegg pages once signed in
-  try {
-    chrome.runtime.onMessage.addListener((m) => {
-      try {
-        if (m && m.type === 'auth:changed' && m.isAuthed) {
-          if (!sessionStorage.getItem('chx_reloaded_after_auth')) {
-            sessionStorage.setItem('chx_reloaded_after_auth', '1');
-            try { window.location.reload(); } catch {}
-          }
-        }
-      } catch {}
-    });
-  } catch {}
   const ID_PROMPTS_BTN = 'chx-prompts-btn';
   const ID_ANSWER_BTN = 'chx-answer-btn';
   const SELECTOR_TARGET_BTN = 'button[data-test="check-structure"]';
@@ -89,26 +76,6 @@
     const c = document.getElementById('chx-noq-countdown');
     if (c) c.textContent = '';
   }
-
-  // Require Google sign-in before enabling any features.
-  try {
-    const isAuthed = await new Promise((resolve) => {
-      try { chrome.storage.local.get(['chxAuth'], (res) => resolve(!!(res && res.chxAuth && res.chxAuth.idToken))); }
-      catch { resolve(false); }
-    });
-    if (!isAuthed) {
-      // Do not auto-trigger interactive auth here to avoid repeated popups.
-      // User can sign in from the extension popup; once signed in we reload.
-      try {
-        chrome.runtime.onMessage.addListener((m) => {
-          if (m && m.type === 'auth:changed' && m.isAuthed) {
-            try { window.location.reload(); } catch {}
-          }
-        });
-      } catch {}
-      return; // Stop content script until user signs in
-    }
-  } catch {}
 
   // Run injection once DOM is ready and also watch for SPA changes
   const observer = new MutationObserver(() => { tryInject(); tryInjectNoQuestionUI(); try { tryAutoClickStartSolving(); } catch {} });

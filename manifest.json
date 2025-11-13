@@ -8,17 +8,10 @@
   
   "permissions": [
     "storage",
-    "clipboardWrite",
-    "identity"
+    "clipboardWrite"
   ],
   "host_permissions": [
     "https://api.deepseek.com/*",
-    "https://www.googleapis.com/*",
-    "https://securetoken.googleapis.com/*",
-    "https://oauth2.googleapis.com/*",
-    "https://firestore.googleapis.com/*",
-    "https://identitytoolkit.googleapis.com/*",
-    "https://accounts.google.com/*",
     "https://expert.chegg.com/*"
   ],
   "content_scripts": [
