@@ -2,53 +2,448 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Chegg Helper Options</title>
+    <title>Chegg Helper Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      body { font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 20px; color: #111; }
-      h1 { font-size: 18px; }
-      .card { border: 1px solid #e5e5e9; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-      label { display: block; font-size: 12px; color: #444; margin: 8px 0 6px; }
-      input[type="text"], textarea { width: 100%; box-sizing: border-box; border: 1px solid #ddd; border-radius: 8px; padding: 8px 10px; font-size: 14px; }
-      button { border: 1px solid #ddd; border-radius: 8px; padding: 8px 12px; cursor: pointer; background: #fff; }
-      .row { display: flex; gap: 8px; align-items: center; }
-      .right { justify-content: flex-end; }
-      .muted { color: #666; font-size: 12px; }
-      .ok { color: #0b8f2f; }
-      .err { color: #c62828; }
+      :root {
+        --primary: #1a73e8;
+        --primary-dark: #1557b0;
+        --primary-light: #e8f0fe;
+        --success: #34a853;
+        --success-light: #e6f4ea;
+        --error: #ea4335;
+        --error-light: #fce8e6;
+        --warning: #fbbc04;
+        --ink: #202124;
+        --text: #5f6368;
+        --muted: #80868b;
+        --bg: #f8f9fa;
+        --card: #ffffff;
+        --border: #dadce0;
+        --shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+        --shadow-lg: 0 2px 6px 2px rgba(60,64,67,.15);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: 'Google Sans', 'Segoe UI', Roboto, -apple-system, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        font-size: 14px;
+        line-height: 1.6;
+        padding: 0;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 32px 24px;
+      }
+
+      .header {
+        background: white;
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow);
+        background: linear-gradient(135deg, #1a73e8 0%, #4285f4 50%, #5e97f6 100%);
+        color: white;
+      }
+
+      .header-title {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .header-subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+      }
+
+      .card {
+        background: white;
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        transition: all 0.2s ease;
+      }
+
+      .card:hover {
+        box-shadow: var(--shadow-lg);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid var(--bg);
+      }
+
+      .card-icon {
+        width: 48px;
+        height: 48px;
+        background: var(--primary-light);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+
+      .card-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      .card-desc {
+        font-size: 13px;
+        color: var(--text);
+        margin-top: 4px;
+      }
+
+      .form-group {
+        margin-bottom: 24px;
+      }
+
+      .form-group:last-child {
+        margin-bottom: 0;
+      }
+
+      label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+
+      .label-desc {
+        font-size: 12px;
+        color: var(--text);
+        font-weight: 400;
+        margin-top: 2px;
+      }
+
+      input[type="text"],
+      input[type="password"],
+      textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        transition: all 0.2s ease;
+        background: white;
+      }
+
+      input[type="text"]:focus,
+      input[type="password"]:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-light);
+      }
+
+      input[readonly] {
+        background: var(--bg);
+        cursor: not-allowed;
+      }
+
+      .input-group {
+        display: flex;
+        gap: 8px;
+        align-items: stretch;
+      }
+
+      .input-group input {
+        flex: 1;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border-radius: 10px;
+        border: none;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        white-space: nowrap;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+        box-shadow: var(--shadow);
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+
+      .btn-secondary {
+        background: white;
+        color: var(--ink);
+        border: 1px solid var(--border);
+      }
+
+      .btn-secondary:hover {
+        background: var(--bg);
+        border-color: var(--primary);
+      }
+
+      .btn-success {
+        background: var(--success);
+        color: white;
+        box-shadow: var(--shadow);
+      }
+
+      .btn-success:hover {
+        background: #2d8b47;
+        transform: translateY(-1px);
+      }
+
+      .btn-danger {
+        background: var(--error);
+        color: white;
+        box-shadow: var(--shadow);
+      }
+
+      .btn-danger:hover {
+        background: #d33828;
+        transform: translateY(-1px);
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        margin-top: 24px;
+      }
+
+      .status {
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin-top: 16px;
+        display: none;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .status.visible {
+        display: flex;
+      }
+
+      .status.success {
+        background: var(--success-light);
+        color: var(--success);
+        border: 1px solid var(--success);
+      }
+
+      .status.error {
+        background: var(--error-light);
+        color: var(--error);
+        border: 1px solid var(--error);
+      }
+
+      .status-icon {
+        font-size: 16px;
+      }
+
+      .info-box {
+        background: var(--primary-light);
+        border: 1px solid var(--primary);
+        border-radius: 10px;
+        padding: 16px;
+        margin-top: 16px;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .info-box-title {
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      code {
+        background: rgba(0, 0, 0, 0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 12px;
+      }
+
+      .file-input-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+      }
+
+      .file-input-wrapper input[type="file"] {
+        position: absolute;
+        left: -9999px;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 24px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .footer-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .footer-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 16px;
+        }
+
+        .card {
+          padding: 20px;
+        }
+
+        .btn-group {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
     </style>
   </head>
   <body>
-    <h1>Chegg Helper – Options</h1>
+    <div class="container">
+      <div class="header">
+        <div class="header-title">
+          ⚙️ Chegg Helper Settings
+        </div>
+        <div class="header-subtitle">Configure your extension preferences and API keys</div>
+      </div>
 
-    <div class="card">
-      <h2>API Keys</h2>
-      <p class="muted">Keys are stored locally with <code>chrome.storage.sync</code>. Paste your own keys here.</p>
-      <label>DeepSeek API Key</label>
-      <input id="deepseekKey" type="text" placeholder="sk-..." />
-      <label style="margin-top:12px">Google Web Client ID</label>
-      <input id="googleClientId" type="text" placeholder="xxxxxxx.apps.googleusercontent.com" />
-      <label style="margin-top:12px">Computed Redirect URI (add this in Google Cloud &rarr; OAuth client)</label>
-      <div class="row">
-        <input id="redirectUri" type="text" readonly style="flex:1" />
-        <button id="copyRedirect">Copy</button>
-      </div>
-      <div class="row right" style="margin-top:10px;">
-        <button id="save">Save</button>
-        <button id="test">Test Models</button>
-      </div>
-      <div id="status" class="muted" style="margin-top:8px;"></div>
-    </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🔑</div>
+          <div>
+            <div class="card-title">API Configuration</div>
+            <div class="card-desc">Set up your DeepSeek API key for AI features</div>
+          </div>
+        </div>
 
-    <div class="card">
-      <h2>Prompts</h2>
-      <div class="row">
-        <button id="exportPrompts">Export JSON</button>
-        <input type="file" id="importFile" accept="application/json" />
-        <button id="clearPrompts">Clear All</button>
+        <div class="form-group">
+          <label>
+            DeepSeek API Key
+            <span class="label-desc">Get your API key from <a href="https://platform.deepseek.com" target="_blank">platform.deepseek.com</a></span>
+          </label>
+          <input id="deepseekKey" type="password" placeholder="sk-..." />
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">
+            💡 How to get your DeepSeek API key
+          </div>
+          <div>
+            1. Visit <a href="https://platform.deepseek.com" target="_blank">platform.deepseek.com</a><br>
+            2. Sign up or log in to your account<br>
+            3. Navigate to API Keys section<br>
+            4. Create a new API key and copy it here
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button id="save" class="btn btn-success">
+            <span>💾</span>
+            <span>Save Settings</span>
+          </button>
+          <button id="test" class="btn btn-secondary">
+            <span>🧪</span>
+            <span>Test Connection</span>
+          </button>
+        </div>
+
+        <div id="status" class="status">
+          <span class="status-icon"></span>
+          <span class="status-text"></span>
+        </div>
       </div>
-      <div id="promptCount" class="muted" style="margin-top:8px;"></div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📝</div>
+          <div>
+            <div class="card-title">Custom Prompts</div>
+            <div class="card-desc">Manage your saved prompts and templates</div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button id="exportPrompts" class="btn btn-secondary">
+            <span>📤</span>
+            <span>Export Prompts</span>
+          </button>
+          <div class="file-input-wrapper">
+            <button class="btn btn-secondary">
+              <span>📥</span>
+              <span>Import Prompts</span>
+            </button>
+            <input type="file" id="importFile" accept="application/json" />
+          </div>
+          <button id="clearPrompts" class="btn btn-danger">
+            <span>🗑️</span>
+            <span>Clear All</span>
+          </button>
+        </div>
+
+        <div id="promptCount" class="status success visible" style="margin-top: 16px;">
+          <span class="status-icon">📊</span>
+          <span class="status-text">Loading prompts...</span>
+        </div>
+      </div>
+
+      <div class="footer">
+        Need help? <a href="https://wa.me/918919937369" target="_blank" class="footer-link">Contact Support on WhatsApp</a>
+      </div>
     </div>
 
     <script src="options.js"></script>
   </body>
-  </html>
+</html>

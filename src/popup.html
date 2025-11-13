@@ -5,84 +5,330 @@
     <title>Chegg Helper</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      :root{--pri:#1a73e8;--ink:#111;--muted:#667085;--bg:#f7f8fa;--card:#ffffff;--border:#e6e8ee}
-      *{box-sizing:border-box}
-      body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;min-width:320px;background:var(--bg);color:var(--ink)}
-      .wrap{padding:12px}
-      .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(16,24,40,.06)}
-      .hero{padding:14px 16px;background:linear-gradient(135deg,#1a73e8 0%,#6a9ff8 100%);color:#fff}
-      .hero .title{font-weight:700;font-size:16px}
-      .hero .sub{opacity:.95;margin-top:2px;font-size:12px}
-      .body{padding:14px 16px}
-      .row{display:flex;align-items:center;gap:10px}
-      .col{display:flex;flex-direction:column;gap:8px}
-      .muted{color:var(--muted);font-size:12px}
-      .btn{padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:#fff;cursor:pointer;font-weight:600}
-      .btn.pri{background:var(--pri);border-color:var(--pri);color:#fff}
-      .btn.full{width:100%}
-      .input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#fff}
-      .or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}
-      .or:before,.or:after{content:"";height:1px;flex:1;background:var(--border)}
-      .usage{margin-top:6px}
-      .bar{height:8px;background:#eef0f6;border-radius:999px;overflow:hidden}
-      .bar>span{display:block;height:100%;background:linear-gradient(90deg,#00c2ff,#2dd4bf);width:0}
-      .user{display:flex;gap:10px;align-items:center}
-      .avatar{width:40px;height:40px;border-radius:50%;background:#eef0f6;object-fit:cover}
-      .name{font-weight:700}
-      .footer{padding:10px 16px;border-top:1px solid var(--border);background:#fafbff}
-      a{color:var(--pri);text-decoration:none}
+      :root {
+        --primary: #1a73e8;
+        --primary-dark: #1557b0;
+        --primary-light: #e8f0fe;
+        --success: #34a853;
+        --warning: #fbbc04;
+        --ink: #202124;
+        --text: #5f6368;
+        --muted: #80868b;
+        --bg: #f8f9fa;
+        --card: #ffffff;
+        --border: #dadce0;
+        --shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+        --shadow-hover: 0 1px 3px 0 rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: 'Google Sans', 'Segoe UI', Roboto, -apple-system, system-ui, sans-serif;
+        margin: 0;
+        width: 380px;
+        background: var(--bg);
+        color: var(--ink);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        min-height: 400px;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #1a73e8 0%, #4285f4 50%, #5e97f6 100%);
+        color: white;
+        padding: 24px 20px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .header-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .header-subtitle {
+        font-size: 13px;
+        opacity: 0.9;
+        font-weight: 400;
+      }
+
+      .badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        backdrop-filter: blur(10px);
+      }
+
+      .content {
+        flex: 1;
+        padding: 20px;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .feature-card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+        transition: all 0.2s ease;
+        cursor: default;
+      }
+
+      .feature-card:hover {
+        box-shadow: var(--shadow);
+        transform: translateY(-2px);
+        border-color: var(--primary);
+      }
+
+      .feature-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--primary-light);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+
+      .feature-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+
+      .feature-desc {
+        font-size: 11px;
+        color: var(--text);
+        line-height: 1.4;
+      }
+
+      .status-card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 0;
+      }
+
+      .status-row:not(:last-child) {
+        border-bottom: 1px solid var(--bg);
+      }
+
+      .status-label {
+        font-size: 13px;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .status-value {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink);
+        padding: 4px 10px;
+        background: var(--bg);
+        border-radius: 8px;
+      }
+
+      .status-value.active {
+        background: #e6f4ea;
+        color: var(--success);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: none;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+        box-shadow: var(--shadow);
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-1px);
+      }
+
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+
+      .btn-secondary {
+        background: white;
+        color: var(--ink);
+        border: 1px solid var(--border);
+        margin-top: 8px;
+      }
+
+      .btn-secondary:hover {
+        background: var(--bg);
+        border-color: var(--primary);
+      }
+
+      .footer {
+        background: white;
+        border-top: 1px solid var(--border);
+        padding: 16px 20px;
+        text-align: center;
+      }
+
+      .footer-text {
+        font-size: 12px;
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+
+      .footer-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .footer-link:hover {
+        text-decoration: underline;
+      }
+
+      .icon-checkmark::before { content: '✓'; color: var(--success); font-weight: bold; }
+      .icon-settings::before { content: '⚙'; }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <div class="card" id="loggedOut">
-        <div class="hero">
-          <div class="title">Welcome to Chegg Helper</div>
-          <div class="sub">Unlock auto‑refresh and all pro features</div>
-        </div>
-        <div class="body col">
-          <div class="row" style="flex-wrap:wrap;gap:6px">
-            <span class="muted" style="border:1px solid var(--border);padding:6px 8px;border-radius:999px">Auto Refresh</span>
-            <span class="muted" style="border:1px solid var(--border);padding:6px 8px;border-radius:999px">Auto Accept</span>
-            <span class="muted" style="border:1px solid var(--border);padding:6px 8px;border-radius:999px">Guidelines Check</span>
-            <span class="muted" style="border:1px solid var(--border);padding:6px 8px;border-radius:999px">Format Answer</span>
-            <span class="muted" style="border:1px solid var(--border);padding:6px 8px;border-radius:999px">Prompts</span>
+    <div class="container">
+      <div class="header">
+        <div class="header-content">
+          <div class="header-title">
+            Chegg Helper
+            <span class="badge">Active</span>
           </div>
-          <button id="btnLogin" class="btn pri full">Sign in with Google</button>
-        </div>
-        <div class="footer">
-          <div class="muted">For any doubts, contact WhatsApp: <a href="https://wa.me/918919937369" target="_blank">wa.me/918919937369</a></div>
+          <div class="header-subtitle">Enhance your Chegg expert experience</div>
         </div>
       </div>
 
-      <div class="card" id="loggedIn" style="display:none">
-        <div class="hero">
-          <div class="title">Chegg Helper</div>
-          <div class="sub">You’re signed in</div>
-        </div>
-        <div class="body col">
-          <div class="user">
-            <img id="avatar" class="avatar" alt="avatar" />
-            <div>
-              <div id="name" class="name"></div>
-              <div id="email" class="muted"></div>
-            </div>
+      <div class="content">
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-title">Auto Refresh</div>
+            <div class="feature-desc">Automatically refresh questions</div>
           </div>
-          <div class="usage" id="usageWrap" style="display:none">
-            <div class="row" style="justify-content:space-between">
-              <div class="muted">Generate usage</div>
-              <div class="muted" id="usageTxt"></div>
-            </div>
-            <div class="bar"><span id="usageBar"></span></div>
+
+          <div class="feature-card">
+            <div class="feature-icon">✨</div>
+            <div class="feature-title">Auto Accept</div>
+            <div class="feature-desc">Quick question acceptance</div>
           </div>
-          <button id="btnLogout" class="btn">Sign out</button>
+
+          <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <div class="feature-title">AI Generate</div>
+            <div class="feature-desc">Smart answer generation</div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <div class="feature-title">Format Answer</div>
+            <div class="feature-desc">Professional formatting</div>
+          </div>
         </div>
-        <div class="footer">
-          <div class="muted">Need help? <a href="https://wa.me/918919937369" target="_blank">WhatsApp us</a></div>
+
+        <div class="status-card">
+          <div class="status-row">
+            <div class="status-label">
+              <span class="icon-checkmark"></span>
+              Extension Status
+            </div>
+            <div class="status-value active">Running</div>
+          </div>
+          <div class="status-row">
+            <div class="status-label">
+              <span class="icon-settings"></span>
+              API Key
+            </div>
+            <div class="status-value" id="apiStatus">Not Set</div>
+          </div>
         </div>
+
+        <button id="btnOptions" class="btn btn-primary">
+          <span>⚙️</span>
+          <span>Open Settings</span>
+        </button>
+
+        <button id="btnRefresh" class="btn btn-secondary">
+          <span>🔄</span>
+          <span>Refresh Chegg Page</span>
+        </button>
+      </div>
+
+      <div class="footer">
+        <div class="footer-text">Need help with setup or have questions?</div>
+        <a href="https://wa.me/918919937369" target="_blank" class="footer-link">Contact Support on WhatsApp</a>
       </div>
     </div>
 
     <script src="popup.js" type="module"></script>
   </body>
-  </html>
+</html>
