@@ -1459,7 +1459,7 @@
     ].join('\n');
     const user = src;
     try {
-      const req = sendMsg({ type: 'generate', model: 'deepseek-chat', system, user });
+      const req = sendMsg({ type: 'generate', provider: 'deepseek', model: 'deepseek-chat', system, user });
       const to = new Promise(resolve => setTimeout(() => resolve({ ok: false, error: 'timeout' }), timeoutMs));
       const res = await Promise.race([req, to]);
       if (!res || !res.ok || !res.text) return null;
@@ -1576,7 +1576,7 @@
         '- Return ONLY the original text with markers inserted. No extra commentary or formatting.',
       ].join('\n');
       const user = src;
-      const req = sendMsg({ type: 'generate', model: 'deepseek-chat', system, user });
+      const req = sendMsg({ type: 'generate', provider: 'deepseek', model: 'deepseek-chat', system, user });
       const to = new Promise(resolve => setTimeout(() => resolve({ ok: false, error: 'timeout' }), timeoutMs));
       const res = await Promise.race([req, to]);
       if (res && res.ok && res.text) {
@@ -4098,7 +4098,7 @@ if (p.type === 'math') {
         box.textContent = 'Running review…';
         const data = collectAnswerStructure();
         const { system, user } = buildStructureReviewPrompt(data);
-        const res = await sendMsg({ type: 'generate', model: 'deepseek-chat', system, user });
+        const res = await sendMsg({ type: 'generate', provider: 'deepseek', model: 'deepseek-chat', system, user });
         if (!res || !res.ok) { box.textContent = `Error: ${res && res.error ? res.error : 'Unknown error'}`; return; }
         lastReviewRaw = res.text || '';
         box.innerHTML = renderMarkdown(lastReviewRaw).replace(/^<div class=\"chx-answer__content\">|<\/div>$/g, '');

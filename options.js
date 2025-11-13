@@ -7,8 +7,18 @@ async function set(obj) {
 }
 
 async function init() {
-  const { deepseek_api_key = '', chx_prompts = [] } = await get(['deepseek_api_key', 'chx_prompts']);
+  const {
+    deepseek_api_key = '',
+    openai_api_key = '',
+    gemini_api_key = '',
+    claude_api_key = '',
+    chx_prompts = []
+  } = await get(['deepseek_api_key', 'openai_api_key', 'gemini_api_key', 'claude_api_key', 'chx_prompts']);
+
   document.getElementById('deepseekKey').value = deepseek_api_key;
+  document.getElementById('openaiKey').value = openai_api_key;
+  document.getElementById('geminiKey').value = gemini_api_key;
+  document.getElementById('claudeKey').value = claude_api_key;
 
   const promptCountEl = document.getElementById('promptCount');
   const promptText = promptCountEl.querySelector('.options-status-text');
@@ -19,7 +29,10 @@ async function init() {
   // Save button
   document.getElementById('save').onclick = async () => {
     const button = document.getElementById('save');
-    const key = document.getElementById('deepseekKey').value.trim();
+    const deepseekKey = document.getElementById('deepseekKey').value.trim();
+    const openaiKey = document.getElementById('openaiKey').value.trim();
+    const geminiKey = document.getElementById('geminiKey').value.trim();
+    const claudeKey = document.getElementById('claudeKey').value.trim();
 
     // Add loading state
     button.classList.add('is-loading');
@@ -28,7 +41,10 @@ async function init() {
 
     try {
       await set({
-        deepseek_api_key: key,
+        deepseek_api_key: deepseekKey,
+        openai_api_key: openaiKey,
+        gemini_api_key: geminiKey,
+        claude_api_key: claudeKey,
       });
       showStatus('Settings saved successfully!', true);
     } catch (error) {
@@ -50,14 +66,38 @@ async function init() {
     button.disabled = true;
     button.setAttribute('aria-busy', 'true');
 
-    showStatus('Testing connection to DeepSeek API...', null);
+    showStatus('Testing API connections...', null);
 
     try {
-      const ds = await ping('deepseek');
-      if (ds.ok) {
-        showStatus(`Connection successful! Found ${ds.models ? ds.models.length : 0} models.`, true);
+      const providers = ['deepseek', 'openai', 'gemini', 'claude'];
+      const providerNames = {
+        deepseek: 'DeepSeek',
+        openai: 'OpenAI',
+        gemini: 'Gemini',
+        claude: 'Claude'
+      };
+
+      const results = [];
+      let successCount = 0;
+
+      for (const provider of providers) {
+        const result = await ping(provider);
+        if (result.ok) {
+          successCount++;
+          results.push(`${providerNames[provider]}: ✅ ${result.models ? result.models.length : 0} models`);
+        } else {
+          // Only show error if API key is configured
+          const keyField = document.getElementById(`${provider}Key`);
+          if (keyField && keyField.value.trim()) {
+            results.push(`${providerNames[provider]}: ❌ ${result.error || 'Failed'}`);
+          }
+        }
+      }
+
+      if (successCount > 0) {
+        showStatus(`${successCount} provider(s) connected: ${results.join(' | ')}`, true);
       } else {
-        showStatus(`Connection failed: ${ds.error || 'Unknown error'}`, false);
+        showStatus('No API connections successful. Please check your API keys.', false);
       }
     } catch (error) {
       showStatus(`Test failed: ${error.message}`, false);
@@ -169,11 +209,17 @@ async function init() {
   };
 
   // Keyboard shortcuts for accessibility
-  document.getElementById('deepseekKey').addEventListener('keydown', (e) => {
-    // Ctrl+Enter or Cmd+Enter to save
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      e.preventDefault();
-      document.getElementById('save').click();
+  const apiKeyFields = ['deepseekKey', 'openaiKey', 'geminiKey', 'claudeKey'];
+  apiKeyFields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+      field.addEventListener('keydown', (e) => {
+        // Ctrl+Enter or Cmd+Enter to save
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          document.getElementById('save').click();
+        }
+      });
     }
   });
 }
