@@ -99,10 +99,38 @@
       .popup-content {
         flex: 1;
         padding: var(--chx-space-4);
-        overflow: hidden;
+        overflow-y: auto;
+        overflow-x: hidden;
         display: flex;
         flex-direction: column;
         gap: var(--chx-space-3);
+        scroll-behavior: smooth;
+      }
+
+      /* Scrollbar Styling */
+      .popup-content::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .popup-content::-webkit-scrollbar-track {
+        background: var(--chx-gray-100);
+        border-radius: var(--chx-radius-full);
+      }
+
+      .popup-content::-webkit-scrollbar-thumb {
+        background: var(--chx-gray-400);
+        border-radius: var(--chx-radius-full);
+        transition: background var(--chx-transition-fast);
+      }
+
+      .popup-content::-webkit-scrollbar-thumb:hover {
+        background: var(--chx-gray-500);
+      }
+
+      /* Firefox scrollbar styling */
+      .popup-content {
+        scrollbar-width: thin;
+        scrollbar-color: var(--chx-gray-400) var(--chx-gray-100);
       }
 
       .popup-section {
