@@ -880,18 +880,21 @@
             </select>
           </span>
         </div>
-        <label class="chx-toggle" style="margin-left:8px">
+        <span class="chx-chip-divider"></span>
+        <label class="chx-toggle">
           <input class="chx-toggle-input" type="checkbox" id="chx-auto-accept">
           <span class="chx-toggle-label">Auto‑accept</span>
         </label>
-        <button class="chx-btn chx-btn-outline" id="chx-guidelines-chip" style="margin-left:8px; padding:4px 8px; font-size:12px;">Guidelines Check</button>
+        <span class="chx-chip-divider"></span>
+        <button class="chx-btn" id="chx-guidelines-chip">Guidelines</button>
+        <span class="chx-chip-divider"></span>
         <span id="chx-sound" class="chx-bell" title="Sound alerts">
-          <svg class="chx-bell-svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+          <svg class="chx-bell-svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
             <path class="bell" fill="currentColor" d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2Zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 1 0-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2Z"/>
             <line class="slash" x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </span>
-        <span class="chx-status-dot"></span>
+        <span class="chx-status-dot" title="Extension active"></span>
         <span class="chx-countdown" id="chx-noq-countdown"></span>`;
 
       if (afterEl && afterEl.parentNode) afterEl.parentNode.insertBefore(banner, afterEl.nextSibling);
